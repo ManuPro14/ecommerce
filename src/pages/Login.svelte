@@ -1,9 +1,17 @@
 <script lang="ts">
-  let email = "";
+  import { currentRoute } from "../stores/route";
+
+  let user = "";
   let password = "";
+  let error = "";
 
   function handleSubmit() {
-    console.log("Intento de login con:", { email, password });
+    if (user === "adminManuecommerce" && password === "M4nu3c0mm3rc3") {
+      localStorage.setItem("adminToken", "admin");
+      currentRoute.set("/admin");
+    } else {
+      error = "Usuario o contraseña incorrectos";
+    }
   }
 </script>
 
@@ -22,14 +30,14 @@
         <div>
           <label for="email-address" class="sr-only">Correo electrónico</label>
           <input
-            id="email-address"
-            name="email"
-            type="email"
-            autocomplete="email"
+            id="user-admin"
+            name="user"
+            type="text"
+            autocomplete="username"
             required
             class="appearance-none rounded-none relative bg-gray-300 block w-full px-3 py-2 border border-gray-800 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="Correo electrónico"
-            bind:value={email}
+            placeholder="Usuario"
+            bind:value={user}
           />
         </div>
         <div>
