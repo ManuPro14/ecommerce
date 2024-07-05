@@ -2,30 +2,28 @@
   import { currentRoute } from "./stores/route";
   import Navbar from "./components/Navbar.svelte";
   import Home from "./pages/Home.svelte";
+  import Products from "./pages/Products.svelte";
   import Login from "./pages/Login.svelte";
+  import Admin from "./pages/Admin.svelte";
+  import Cart from "./pages/Cart.svelte";
 
-  function handleRouteChange() {
-    currentRoute.set(window.location.pathname);
-  }
-
-  import { onMount } from "svelte";
-  onMount(() => {
-    window.addEventListener("popstate", handleRouteChange);
-    handleRouteChange();
-    return () => {
-      window.removeEventListener("popstate", handleRouteChange);
-    };
-  });
+  $: path = $currentRoute;
 </script>
 
 <Navbar />
-<main class="pt-16">
-  <!-- Añadimos padding-top para evitar que el contenido quede detrás del navbar -->
-  {#if $currentRoute === "/"}
+
+<main>
+  {#if path === "/"}
     <Home />
-  {:else if $currentRoute === "/login"}
+  {:else if path === "/productos"}
+    <Products />
+  {:else if path === "/login"}
     <Login />
+  {:else if path === "/admin"}
+    <Admin />
+  {:else if path === "/carrito"}
+    <Cart />
   {:else}
-    <p>Página no encontrada</p>
+    <p>Página no encontrada: {path}</p>
   {/if}
 </main>

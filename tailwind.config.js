@@ -2,7 +2,12 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'heroImage': "url('/public/img/bg-header.jpg')",
+        'contactImage': "url('/public/img/bg-contacto.jpg')",
+    },
   },
   plugins: [],
+}
 }
