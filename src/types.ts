@@ -1,11 +1,13 @@
+// types.ts
 export interface Product {
   _id: string;
   name: string;
   price: number;
   quantity: number;
   description: string;
+  category: string;
+  image: string;
 }
-
 export interface NewProduct {
   name: string;
   price: number | null;

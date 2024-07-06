@@ -3,7 +3,6 @@
   import { currentRoute } from "../stores/route";
   import ProductManagement from "../components/admin/ProductManagement.svelte";
   import SalesSummary from "../components/admin/SalesSummary.svelte";
-  import Inventory from "./Inventory.svelte";
   import { updateRoute } from "../stores/route";
 
   let isAuthenticated = false;
@@ -38,7 +37,7 @@
 </script>
 
 {#if isAuthenticated}
-  <div class="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 py-20">
+  <div class="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 py-32">
     <div class="container mx-auto px-4">
       <h1 class="text-4xl font-bold mb-8 text-white text-center">
         Panel de Administrador
@@ -46,17 +45,15 @@
 
       {#if showNotification}
         <div
-          class={`fixed top-4 right-4 p-4 rounded-md ${notificationType === "success" ? "bg-green-500" : "bg-red-500"} text-white`}
+          class={`fixed top-12 right-4 p-12 rounded-md ${
+            notificationType === "success" ? "bg-green-500" : "bg-red-500"
+          } text-white`}
         >
           {notificationMessage}
         </div>
       {/if}
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <ProductManagement
-          on:success={handleNotification}
-          on:error={handleNotification}
-        />
+      <div class="flex justify-center">
         <SalesSummary />
       </div>
 
@@ -65,7 +62,7 @@
       >
         <button
           on:click={goToInventory}
-          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
         >
           Ver Inventario
         </button>
