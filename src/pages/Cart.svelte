@@ -1,14 +1,14 @@
 <script lang="ts">
   import { cart, type CartItem } from "../stores/cartStore";
 
-  let cartItems: CartItem[];
+  let cartItems: CartItem[] = [];
 
   cart.subscribe((items) => {
     cartItems = items;
   });
 
   function removeFromCart(id: string) {
-    cart.removeItem(id);
+    cart.removeFromCart(id);
   }
 
   function updateQuantity(id: string, newQuantity: number) {
@@ -19,73 +19,98 @@
     }
   }
 
+  function clearCart() {
+    cart.clearCart();
+  }
+
   $: total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-
-  async function processOrder() {
-    // Implementa la lógica de procesamiento de orden aquí
-    console.log("Procesando orden:", cartItems);
-    alert("Orden procesada (implementación pendiente)");
-  }
 </script>
 
-<div
-  class="container mx-auto px-4 py-40 bg-gray-300 min-h-screen flex justify-center flex-col items-center"
->
-  <h1 class="text-5xl font-bold mb-6 py-8 text-purple-600">
-    Carrito de Compras
-  </h1>
+<div class="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen py-40">
+  <div class="container mx-auto px-4">
+    <h1 class="text-4xl font-bold mb-8 text-white text-center">
+      Tu Carrito de Compras
+    </h1>
 
-  <div class="bg-gray-500 min-h-80 w-full max-w-[700px] rounded-md">
-    {#if cartItems.length === 0}
-      <p class="text-2xl py-4 font-semibold">Tu carrito está vacío</p>
-    {:else}
-      <div class=" shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        {#each cartItems as item (item._id)}
-          <div class="flex items-center justify-between border-b py-2">
-            <span class="font-semibold">{item.name}</span>
-            <div>
-              <input
-                type="number"
-                min="1"
-                bind:value={item.quantity}
-                on:change={() => updateQuantity(item._id, item.quantity)}
-                class="w-16 text-center border rounded"
-              />
-              <span class="mx-2"
-                >${(item.price * item.quantity).toFixed(2)}</span
-              >
-              <button
-                on:click={() => removeFromCart(item._id)}
-                class="text-red-500 hover:text-red-700"
-              >
-                Eliminar
-              </button>
+    <div class="flex items-center justify-center">
+      {#if cartItems.length === 0}
+        <p class="text-white text-center text-xl">Tu carrito está vacío.</p>
+      {:else}
+        <div
+          class="bg-gray-100 rounded-lg shadow-md p-6 max-w-screen-lg flex flex-col"
+        >
+          {#each cartItems as item (item._id)}
+            <div class="flex items-center justify-between border-b-4 py-4">
+              <div class="flex items-center justify-center text-gray-700 px-4">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  class="w-16 h-16 object-cover rounded mr-4 text-gray-700"
+                />
+                <div class="flex flex-col justify-center items-center">
+                  <h3 class="text-lg font-semibold text-center">{item.name}</h3>
+                  <p class="text-gray-600 text-center">
+                    ${item.price.toFixed(2)}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex flex-col justify-center items-center px-4">
+                <div class="flex flex-row py-2">
+                  <button
+                    on:click={() => updateQuantity(item._id, item.quantity - 1)}
+                    class="bg-gray-300 py-1 rounded w-auto text-gray-700 border-gray-400"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    bind:value={item.quantity}
+                    on:change={() => updateQuantity(item._id, item.quantity)}
+                    class="w-12 text-center bg-gray-300 text-gray-700 border-gray-400 border"
+                  />
+                  <button
+                    on:click={() => updateQuantity(item._id, item.quantity + 1)}
+                    class="bg-gray-300 py-1 rounded w-auto text-gray-700 border-gray-400"
+                  >
+                    +
+                  </button>
+                </div>
+
+                <button
+                  on:click={() => removeFromCart(item._id)}
+                  class="ml-4 bg-red-600 text-gray-300 hover:text-red-700"
+                >
+                  Eliminar
+                </button>
+              </div>
             </div>
+          {/each}
+
+          <div class="mt-8">
+            <h4 class="text-xl font-semibold text-gray-700">
+              Total: ${total.toFixed(2)}
+            </h4>
           </div>
-        {/each}
 
-        <div class="mt-4 text-right">
-          <p class="text-xl font-bold">Total: ${total.toFixed(2)}</p>
+          <div class="mt-8 flex justify-between">
+            <button
+              on:click={clearCart}
+              class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-300"
+            >
+              Vaciar Carrito
+            </button>
+            <button
+              class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
+            >
+              Proceder al Pago
+            </button>
+          </div>
         </div>
-
-        <div class="mt-6 flex justify-between">
-          <button
-            on:click={() => cart.clearCart()}
-            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Vaciar Carrito
-          </button>
-          <button
-            on:click={processOrder}
-            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Procesar Compra
-          </button>
-        </div>
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
 </div>

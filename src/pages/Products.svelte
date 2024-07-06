@@ -1,8 +1,10 @@
 <script lang="ts">
-  
+  import { cart } from "../stores/cartStore";
+  import type { CartItem } from "../stores/cartStore";
+
   const products = [
     {
-      id: 1,
+      id: "1",
       name: "Smartphone XYZ",
       price: 599.99,
       description:
@@ -10,7 +12,7 @@
       image: "/public/img/smartphone.webp",
     },
     {
-      id: 2,
+      id: "2",
       name: "Laptop ABC",
       price: 1299.99,
       description:
@@ -18,7 +20,7 @@
       image: "/public/img/laptop.jpg",
     },
     {
-      id: 3,
+      id: "3",
       name: "Auriculares Noise-Cancel",
       price: 199.99,
       description:
@@ -26,7 +28,7 @@
       image: "/public/img/auriculares.jpg",
     },
     {
-      id: 4,
+      id: "4",
       name: "Smartwatch 1000",
       price: 299.99,
       description:
@@ -34,6 +36,17 @@
       image: "/public/img/smartwatch.jpg",
     },
   ];
+
+  function addToCart(product: (typeof products)[0]) {
+    const cartItem: CartItem = {
+      _id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      image: product.image,
+    };
+    cart.addToCart(cartItem);
+  }
 </script>
 
 <div class="bg-gradient-to-r from-blue-500 to-purple-600 py-20 min-h-screen">
@@ -62,6 +75,7 @@
             <p class="text-gray-600 mb-2">${product.price.toFixed(2)}</p>
             <p class="text-sm text-gray-500 mb-4">{product.description}</p>
             <button
+              on:click={() => addToCart(product)}
               class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
             >
               Añadir al carrito
@@ -72,4 +86,3 @@
     </div>
   </div>
 </div>
-
