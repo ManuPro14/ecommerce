@@ -102,13 +102,13 @@
       on:error={handleError}
     />
 
-    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
+    <div class="bg-gray-200 shadow-lg rounded-lg p-6 mb-8">
       <div class="flex flex-col md:flex-row justify-between items-center mb-4">
         <input
           type="text"
           bind:value={searchTerm}
           placeholder="Buscar productos..."
-          class="w-full md:w-64 px-4 py-2 rounded-full border-2 border-gray-300 focus:outline-none focus:border-blue-500 mb-4 md:mb-0"
+          class="w-full md:w-64 px-4 text-gray-700 py-2 rounded-full border-2 border-gray-300 focus:outline-none focus:border-blue-500 mb-4 md:mb-0"
         />
         <button
           on:click={goBack}
