@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentRoute } from "../stores/route";
+  import { currentRoute, updateRoute } from "../stores/route";
   import { cart } from "../stores/cartStore";
 
   let isMenuOpen = false;
@@ -10,7 +10,7 @@
   });
 
   function navigate(path: string) {
-    currentRoute.set(path);
+    updateRoute(path);
     isMenuOpen = false;
   }
 </script>
@@ -22,10 +22,7 @@
     <div class="flex justify-between h-16">
       <div class="flex items-center">
         <div class="flex-shrink-0 flex items-center">
-          <span
-            class="text-2xl font-bold text-gray-300
-          ">Manu Ecommerce</span
-          >
+          <span class="text-2xl font-bold text-gray-300">Manu Ecommerce</span>
         </div>
       </div>
 
@@ -33,32 +30,28 @@
         <a
           href="/"
           on:click|preventDefault={() => navigate("/")}
-          class="text-white
-            px-3 py-2 rounded-md text-sm font-medium"
+          class="text-white px-3 py-2 rounded-md text-sm font-medium"
         >
           Inicio
         </a>
         <a
           href="/productos"
           on:click|preventDefault={() => navigate("/productos")}
-          class="text-white
-            px-3 py-2 rounded-md text-sm font-medium"
+          class="text-white px-3 py-2 rounded-md text-sm font-medium"
         >
           Productos
         </a>
         <a
           href="/carrito"
           on:click|preventDefault={() => navigate("/carrito")}
-          class="text-white
-            px-3 py-2 rounded-md text-sm font-medium"
+          class="text-white px-3 py-2 rounded-md text-sm font-medium"
         >
           Carrito ({cartItemCount})
         </a>
         <a
           href="/login"
           on:click|preventDefault={() => navigate("/login")}
-          class="text-white
-            px-3 py-2 rounded-full text-sm font-medium"
+          class="text-white px-3 py-2 rounded-full text-sm font-medium"
         >
           Login
         </a>

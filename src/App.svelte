@@ -22,7 +22,7 @@
     <Login />
   {:else if path === "/admin"}
     <Admin />
-  {:else if path === "/inventario"}
+  {:else if path === "/inventory"}
     <Inventory />
   {:else if path === "/carrito"}
     <Cart />

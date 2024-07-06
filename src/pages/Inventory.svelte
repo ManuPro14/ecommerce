@@ -3,6 +3,7 @@
   import { currentRoute } from "../stores/route";
   import { API_URL } from "../config";
   import type { Product } from "../types";
+  import ProductManagement from "../components/admin/ProductManagement.svelte";
 
   let products: Product[] = [];
   let isLoading = true;
@@ -33,6 +34,27 @@
     currentRoute.set("/admin");
   }
 
+  function handleProductAdded(event: CustomEvent<Product>) {
+    products = [...products, event.detail];
+  }
+
+  function handleProductUpdated(event: CustomEvent<Product>) {
+    products = products.map((p) =>
+      p._id === event.detail._id ? event.detail : p
+    );
+  }
+
+  function handleProductDeleted(event: CustomEvent<string>) {
+    products = products.filter((p) => p._id !== event.detail);
+  }
+
+  function handleError(event: CustomEvent<{ message: string }>) {
+    error = event.detail.message;
+    setTimeout(() => {
+      error = null;
+    }, 5000);
+  }
+
   $: filteredProducts = products
     .filter(
       (p) =>
@@ -56,11 +78,29 @@
   }
 </script>
 
-<div class="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 py-12">
+<div class="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 py-20">
   <div class="container mx-auto px-4">
     <h1 class="text-4xl font-bold mb-8 text-white text-center">
-      Inventario de Productos
+      Gestión de Inventario
     </h1>
+
+    {#if error}
+      <div
+        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+        role="alert"
+      >
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline">{error}</span>
+      </div>
+    {/if}
+
+    <ProductManagement
+      {products}
+      on:productAdded={handleProductAdded}
+      on:productUpdated={handleProductUpdated}
+      on:productDeleted={handleProductDeleted}
+      on:error={handleError}
+    />
 
     <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
       <div class="flex flex-col md:flex-row justify-between items-center mb-4">
@@ -80,8 +120,6 @@
 
       {#if isLoading}
         <p class="text-center text-gray-600">Cargando productos...</p>
-      {:else if error}
-        <p class="text-center text-red-500">{error}</p>
       {:else if filteredProducts.length === 0}
         <p class="text-center text-gray-600">No se encontraron productos.</p>
       {:else}
