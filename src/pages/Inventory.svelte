@@ -1,17 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { currentRoute } from "../stores/route";
-
-  interface Product {
-    _id: string;
-    name: string;
-    price: number;
-    cantidad: number;
-    description: string;
-  }
+  import { API_URL } from "../config";
+  import type { Product } from "../types";
 
   let products: Product[] = [];
-  const API_URL = "http://localhost:5000/api";
+  let isLoading = true;
+  let error: string | null = null;
+  let searchTerm = "";
+  let sortBy: "name" | "price" | "quantity" = "name";
+  let sortOrder: "asc" | "desc" = "asc";
 
   onMount(async () => {
     await loadProducts();
@@ -19,52 +17,150 @@
 
   async function loadProducts() {
     try {
+      isLoading = true;
       const response = await fetch(`${API_URL}/products`);
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
-      }
       products = await response.json();
-      console.log("Productos cargados en inventario:", products);
-    } catch (error) {
-      console.error("Error al cargar productos en inventario:", error);
+    } catch (e) {
+      error = e instanceof Error ? e.message : "An unknown error occurred";
+    } finally {
+      isLoading = false;
     }
   }
 
   function goBack() {
     currentRoute.set("/admin");
   }
+
+  $: filteredProducts = products
+    .filter(
+      (p) =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      const factor = sortOrder === "asc" ? 1 : -1;
+      if (sortBy === "name") return factor * a.name.localeCompare(b.name);
+      if (sortBy === "price") return factor * (a.price - b.price);
+      return factor * (a.quantity - b.quantity);
+    });
+
+  function handleSort(column: typeof sortBy) {
+    if (sortBy === column) {
+      sortOrder = sortOrder === "asc" ? "desc" : "asc";
+    } else {
+      sortBy = column;
+      sortOrder = "asc";
+    }
+  }
 </script>
 
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-6">Inventario de Productos</h1>
+<div class="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 py-12">
+  <div class="container mx-auto px-4">
+    <h1 class="text-4xl font-bold mb-8 text-white text-center">
+      Inventario de Productos
+    </h1>
 
-  <div class="bg-white shadow rounded-lg p-6 mb-6 text-gray-900">
-    <table class="min-w-full">
-      <thead>
-        <tr>
-          <th class="text-left">Nombre</th>
-          <th class="text-left">Precio</th>
-          <th class="text-left">Cantidad</th>
-          <th class="text-left">Descripción</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each products as product (product._id)}
-          <tr>
-            <td class="py-2">{product.name}</td>
-            <td class="py-2">${product.price.toFixed(2)}</td>
-            <td class="py-2">{product.cantidad}</td>
-            <td class="py-2">{product.description}</td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
+      <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+        <input
+          type="text"
+          bind:value={searchTerm}
+          placeholder="Buscar productos..."
+          class="w-full md:w-64 px-4 py-2 rounded-full border-2 border-gray-300 focus:outline-none focus:border-blue-500 mb-4 md:mb-0"
+        />
+        <button
+          on:click={goBack}
+          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg"
+        >
+          Volver al Panel de Administrador
+        </button>
+      </div>
+
+      {#if isLoading}
+        <p class="text-center text-gray-600">Cargando productos...</p>
+      {:else if error}
+        <p class="text-center text-red-500">{error}</p>
+      {:else if filteredProducts.length === 0}
+        <p class="text-center text-gray-600">No se encontraron productos.</p>
+      {:else}
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  on:click={() => handleSort("name")}
+                >
+                  Nombre {sortBy === "name"
+                    ? sortOrder === "asc"
+                      ? "↑"
+                      : "↓"
+                    : ""}
+                </th>
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  on:click={() => handleSort("price")}
+                >
+                  Precio {sortBy === "price"
+                    ? sortOrder === "asc"
+                      ? "↑"
+                      : "↓"
+                    : ""}
+                </th>
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  on:click={() => handleSort("quantity")}
+                >
+                  Cantidad {sortBy === "quantity"
+                    ? sortOrder === "asc"
+                      ? "↑"
+                      : "↓"
+                    : ""}
+                </th>
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Descripción
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each filteredProducts as product (product._id)}
+                <tr class="hover:bg-gray-100 transition-colors duration-200">
+                  <td
+                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-300"
+                  >
+                    <div class="text-sm leading-5 font-medium text-gray-900">
+                      {product.name}
+                    </div>
+                  </td>
+                  <td
+                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-300"
+                  >
+                    <div class="text-sm leading-5 text-gray-900">
+                      ${product.price.toFixed(2)}
+                    </div>
+                  </td>
+                  <td
+                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-300"
+                  >
+                    <div class="text-sm leading-5 text-gray-900">
+                      {product.quantity}
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 border-b border-gray-300">
+                    <div class="text-sm leading-5 text-gray-900">
+                      {product.description}
+                    </div>
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
+    </div>
   </div>
-
-  <button
-    on:click={goBack}
-    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-  >
-    Volver al Panel de Administrador
-  </button>
 </div>

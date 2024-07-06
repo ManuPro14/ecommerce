@@ -6,6 +6,7 @@
   import Login from "./pages/Login.svelte";
   import Admin from "./pages/Admin.svelte";
   import Cart from "./pages/Cart.svelte";
+  import Inventory from "./pages/Inventory.svelte";
 
   $: path = $currentRoute;
 </script>
@@ -21,6 +22,8 @@
     <Login />
   {:else if path === "/admin"}
     <Admin />
+  {:else if path === "/inventario"}
+    <Inventory />
   {:else if path === "/carrito"}
     <Cart />
   {:else}

@@ -1,24 +1,53 @@
-<script lang="ts">
-  import { cart } from "../stores/cartStore";
-
-  export let _id: string;
-  export let name: string;
-  export let price: number;
-  export let image: string;
-
-  function addToCart() {
-    cart.addItem({ _id, name, price, quantity: 1 });
+<script context="module" lang="ts">
+  export interface Product {
+    _id: string;
+    name: string;
+    price: number;
+    category?: string;
+    description?: string;
+    image?: string;
   }
 </script>
 
-<div class="bg-white rounded-lg shadow-md overflow-hidden my-auto p-4">
-  <img src={image} alt={name} class="w-full h-48 object-cover" />
+<script lang="ts">
+  import { createEventDispatcher } from "svelte";
+  export let product: Product;
+
+  const dispatch = createEventDispatcher();
+
+  function handleAddToCart() {
+    dispatch("addToCart", product);
+  }
+</script>
+
+<div
+  class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
+>
+  {#if product.image}
+    <img
+      src={product.image}
+      alt={product.name}
+      class="w-full h-48 object-cover"
+    />
+  {:else}
+    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+      <span class="text-gray-500">Sin imagen</span>
+    </div>
+  {/if}
   <div class="p-4">
-    <h3 class="text-lg font-semibold">{name}</h3>
-    <p class="text-gray-600">${price.toFixed(2)}</p>
+    <h3 class="text-lg font-semibold mb-2">{product.name}</h3>
+    {#if product.category}
+      <p class="text-sm text-gray-600 mb-2">{product.category}</p>
+    {/if}
+    <p class="text-xl font-bold text-blue-600 mb-2">
+      ${product.price.toFixed(2)}
+    </p>
+    {#if product.description}
+      <p class="text-sm text-gray-700 mb-4">{product.description}</p>
+    {/if}
     <button
-      class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      on:click={addToCart}
+      class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+      on:click={handleAddToCart}
     >
       Añadir al carrito
     </button>

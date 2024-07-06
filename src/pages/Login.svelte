@@ -16,9 +16,11 @@
 </script>
 
 <div
-  class="min-h-screen-xl rounded-lg flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+  class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 py-12 px-4 sm:px-6 lg:px-8"
 >
-  <div class="max-w-sm w-full space-y-8">
+  <div
+    class="max-w-sm w-full space-y-8 bg-gray-300 rounded-xl p-4 min-h-[350px]"
+  >
     <div>
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-800">
         Iniciar sesión como administrador
@@ -35,7 +37,7 @@
             type="text"
             autocomplete="username"
             required
-            class="appearance-none rounded-none relative bg-gray-300 block w-full px-3 py-2 border border-gray-800 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative bg-gray-400 text-center block w-full px-3 py-2 border border-gray-800 placeholder-gray-800 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Usuario"
             bind:value={user}
           />
@@ -48,7 +50,7 @@
             type="password"
             autocomplete="current-password"
             required
-            class="appearance-none rounded-none bg-gray-300 relative block w-full px-3 py-2 border border-gray-800 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none bg-gray-400 text-center relative block w-full px-3 py-2 border border-gray-800 placeholder-gray-800 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder="Contraseña"
             bind:value={password}
           />
