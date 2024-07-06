@@ -16,5 +16,11 @@
     "isolatedModules": true,
     "moduleDetection": "force"
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "src/components/admin/ProductManagement.svelte",
+    "src/pages/Inventory.svelte"
+  ]
 }
