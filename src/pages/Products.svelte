@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Productos estáticos
+  
   const products = [
     {
       id: 1,
@@ -72,3 +72,4 @@
     </div>
   </div>
 </div>
+
