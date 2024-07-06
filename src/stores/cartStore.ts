@@ -5,26 +5,31 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  image: string;
 }
 
-function createCart() {
+function createCartStore() {
   const { subscribe, set, update } = writable<CartItem[]>([]);
 
   return {
     subscribe,
-    addItem: (item: CartItem) => update(items => {
-      const existingItem = items.find(i => i._id === item._id);
+    addToCart: (product: CartItem) => update(items => {
+      const existingItem = items.find(item => item._id === product._id);
       if (existingItem) {
-        return items.map(i => i._id === item._id ? { ...i, quantity: i.quantity + 1 } : i);
+        return items.map(item => 
+          item._id === product._id 
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
       }
-      return [...items, { ...item, quantity: 1 }];
+      return [...items, { ...product, quantity: 1 }];
     }),
-    removeItem: (id: string) => update(items => items.filter(i => i._id !== id)),
+    removeFromCart: (id: string) => update(items => items.filter(item => item._id !== id)),
     updateQuantity: (id: string, quantity: number) => update(items =>
-      items.map(i => i._id === id ? { ...i, quantity } : i)
+      items.map(item => item._id === id ? { ...item, quantity } : item)
     ),
-    clearCart: () => set([])
+    clearCart: () => set([]),
   };
 }
 
-export const cart = createCart();
+export const cart = createCartStore();
