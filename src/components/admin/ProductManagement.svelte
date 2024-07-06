@@ -7,8 +7,8 @@
 
   interface NewProduct {
     name: string;
-    price: number;
-    quantity: number;
+    price: number | null;
+    quantity: number | null;
     description: string;
     category: string;
     image: string;
@@ -16,8 +16,8 @@
 
   let newProduct: NewProduct = {
     name: "",
-    price: 0,
-    quantity: 0,
+    price: null,
+    quantity: null,
     description: "",
     category: "",
     image: "",
@@ -41,8 +41,8 @@
       dispatch("productAdded", addedProduct);
       newProduct = {
         name: "",
-        price: 0,
-        quantity: 0,
+        price: null,
+        quantity: null,
         description: "",
         category: "",
         image: "",
@@ -155,93 +155,102 @@
   }
 </script>
 
-<div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-  <h2 class="text-2xl font-semibold mb-4">Añadir/Editar Producto</h2>
-  <form
-    on:submit|preventDefault={editingProduct ? updateProduct : addProduct}
-    class="space-y-4"
-  >
-    <input
-      type="text"
-      value={editingProduct ? editingProduct.name : newProduct.name}
-      on:input={handleNameChange}
-      placeholder="Nombre del producto"
-      required
-      class="w-full p-2 border rounded"
-    />
-    <input
-      type="number"
-      value={editingProduct ? editingProduct.price : newProduct.price}
-      on:input={handlePriceChange}
-      placeholder="Precio"
-      required
-      class="w-full p-2 border rounded"
-    />
-    <input
-      type="number"
-      value={editingProduct ? editingProduct.quantity : newProduct.quantity}
-      on:input={handleQuantityChange}
-      placeholder="Cantidad"
-      required
-      class="w-full p-2 border rounded"
-    />
-    <textarea
-      value={editingProduct
-        ? editingProduct.description
-        : newProduct.description}
-      on:input={handleDescriptionChange}
-      placeholder="Descripción"
-      class="w-full p-2 border rounded"
-    ></textarea>
-    <input
-      type="text"
-      value={editingProduct ? editingProduct.category : newProduct.category}
-      on:input={handleCategoryChange}
-      placeholder="Categoría"
-      class="w-full p-2 border rounded"
-    />
-    <input
-      type="text"
-      value={editingProduct ? editingProduct.image : newProduct.image}
-      on:input={handleImageChange}
-      placeholder="URL de la imagen"
-      class="w-full p-2 border rounded"
-    />
-    <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">
-      {editingProduct ? "Actualizar Producto" : "Añadir Producto"}
-    </button>
-  </form>
-</div>
+<section class=" flex justify-center items-center">
+  <div class="bg-gray-200 shadow-lg rounded-lg p-6 mb-8 max-w-screen-sm">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-700">
+      Añadir/Editar Producto
+    </h2>
+    <form
+      on:submit|preventDefault={editingProduct ? updateProduct : addProduct}
+      class="space-y-4"
+    >
+      <input
+        type="text"
+        value={editingProduct ? editingProduct.name : newProduct.name}
+        on:input={handleNameChange}
+        placeholder="Nombre del producto"
+        required
+        class="w-full p-2 rounded bg-gray-400 text-gray-700 placeholder:text-gray-700"
+      />
+      <input
+        type="number"
+        value={editingProduct ? editingProduct.price : newProduct.price}
+        on:input={handlePriceChange}
+        placeholder="Precio"
+        required
+        class="w-full p-2 rounded bg-gray-400 text-gray-700 placeholder:text-gray-700"
+      />
+      <input
+        type="number"
+        value={editingProduct ? editingProduct.quantity : newProduct.quantity}
+        on:input={handleQuantityChange}
+        placeholder="Cantidad"
+        required
+        class="w-full p-2 rounded bg-gray-400 text-gray-700 placeholder:text-gray-700"
+      />
+      <textarea
+        value={editingProduct
+          ? editingProduct.description
+          : newProduct.description}
+        on:input={handleDescriptionChange}
+        placeholder="Descripción"
+        class="w-full p-2 rounded bg-gray-400 text-gray-700 placeholder:text-gray-700"
+      ></textarea>
+      <input
+        type="text"
+        value={editingProduct ? editingProduct.category : newProduct.category}
+        on:input={handleCategoryChange}
+        placeholder="Categoría"
+        class="w-full p-2 rounded bg-gray-400 text-gray-700 placeholder:text-gray-700"
+      />
+      <input
+        type="text"
+        value={editingProduct ? editingProduct.image : newProduct.image}
+        on:input={handleImageChange}
+        placeholder="URL de la imagen"
+        class="w-full p-2 rounded bg-gray-400 text-gray-700 placeholder:text-gray-700"
+      />
+      <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">
+        {editingProduct ? "Actualizar Producto" : "Añadir Producto"}
+      </button>
+    </form>
+  </div>
+</section>
 
-<div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-  <h2 class="text-2xl font-semibold mb-4">Lista de Productos</h2>
-  <table class="min-w-full">
-    <thead>
-      <tr>
-        <th class="text-left">Nombre</th>
-        <th class="text-left">Precio</th>
-        <th class="text-left">Cantidad</th>
-        <th class="text-left">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each products as product (product._id)}
-        <tr>
-          <td>{product.name}</td>
-          <td>${product.price.toFixed(2)}</td>
-          <td>{product.quantity}</td>
-          <td>
-            <button
-              on:click={() => startEditing(product)}
-              class="text-blue-600 hover:text-blue-900">Editar</button
-            >
-            <button
-              on:click={() => deleteProduct(product._id)}
-              class="ml-2 text-red-600 hover:text-red-900">Eliminar</button
-            >
-          </td>
+<section class="flex justify-center items-center">
+  <div class="bg-white shadow-lg rounded-lg p-6 mb-8 max-w-screen-sm">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-700">
+      Lista de Productos
+    </h2>
+    <table class="min-w-full">
+      <thead>
+        <tr class="border-2">
+          <th class="text-center border-4 text-gray-700">Nombre</th>
+          <th class="text-center border-4 text-gray-700">Precio</th>
+          <th class="text-center border-4 text-gray-700">Cantidad</th>
+          <th class="text-center border-4 text-gray-700">Acciones</th>
         </tr>
-      {/each}
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        {#each products as product (product._id)}
+          <tr class="text-gray-700 border-2">
+            <td class="border-4">{product.name}</td>
+            <td class="border-4">${product.price.toFixed(2)}</td>
+            <td class="border-4">{product.quantity}</td>
+            <td>
+              <button
+                on:click={() => startEditing(product)}
+                class="text-gray-300 hover:text-blue-900">Editar</button
+              >
+              <button
+                on:click={() => deleteProduct(product._id)}
+                class="ml-2 text-gray-300 bg-red-500 hover:text-red-900"
+                >Eliminar</button
+              >
+            </td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
+</section>

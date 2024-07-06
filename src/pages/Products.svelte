@@ -2,40 +2,15 @@
   import { cart } from "../stores/cartStore";
   import type { CartItem } from "../stores/cartStore";
 
-  const products = [
-    {
-      id: "1",
-      name: "Smartphone XYZ",
-      price: 599.99,
-      description:
-        "Un smartphone de última generación con cámara de alta resolución.",
-      image: "/public/img/smartphone.webp",
-    },
-    {
-      id: "2",
-      name: "Laptop ABC",
-      price: 1299.99,
-      description:
-        "Laptop potente para profesionales y gamers, con pantalla 4K y 32GB de RAM.",
-      image: "/public/img/laptop.jpg",
-    },
-    {
-      id: "3",
-      name: "Auriculares Noise-Cancel",
-      price: 199.99,
-      description:
-        "Auriculares con cancelación de ruido para una experiencia inmersiva.",
-      image: "/public/img/auriculares.jpg",
-    },
-    {
-      id: "4",
-      name: "Smartwatch 1000",
-      price: 299.99,
-      description:
-        "Smartwatch con seguimiento de actividad y notificaciones en tiempo real.",
-      image: "/public/img/smartwatch.jpg",
-    },
-  ];
+  let products: any[] = [];
+
+  async function fetchProducts() {
+    const response = await fetch("http://localhost:5000/api/products");
+    products = await response.json();
+    console.log(products);
+  }
+
+  fetchProducts();
 
   function addToCart(product: (typeof products)[0]) {
     const cartItem: CartItem = {
@@ -61,9 +36,9 @@
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center"
     >
-      {#each products as product (product.id)}
+      {#each products as product (product._id)}
         <div
-          class="bg-white rounded-xl shadow-md overflow-hidden w-[300px] h-[550px]"
+          class="bg-white rounded-xl shadow-md overflow-hidden w-[300px] h-[550px] p-4"
         >
           <img
             src={product.image}
