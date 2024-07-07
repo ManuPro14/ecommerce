@@ -1,35 +1,64 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { cart } from "../stores/cartStore";
   import type { CartItem } from "../stores/cartStore";
 
-  let products: any[] = [];
-
-  async function fetchProducts() {
-    const response = await fetch("http://localhost:5000/api/products");
-    products = await response.json();
-    console.log(products);
+  interface Product {
+    _id: string;
+    name: string;
+    price: number;
+    description: string;
+    image: string;
   }
 
-  fetchProducts();
+  let products: Product[] = [];
 
-  function addToCart(product: (typeof products)[0]) {
+  async function fetchProducts() {
+    try {
+      const response = await fetch("http://localhost:5000/api/products");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      products = await response.json();
+      console.log(products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }
+
+  onMount(() => {
+    fetchProducts();
+  });
+
+  function addToCart(product: Product) {
     const cartItem: CartItem = {
-      _id: product.id,
+      _id: product._id,
       name: product.name,
       price: product.price,
       quantity: 1,
       image: product.image,
     };
     cart.addToCart(cartItem);
+    console.log("Added to cart:", cartItem);
+  }
+
+  // Función para formatear el precio en COP
+  function formatPrice(price: number): string {
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
   }
 </script>
 
-<div class="bg-gradient-to-r from-blue-500 to-purple-600 py-20 min-h-screen">
+<div class="bg-gray-200 py-20 min-h-screen">
   <div class="container mx-auto px-4">
-    <h1 class="text-5xl font-bold mb-4 text-white text-center">
+    <h1 class="text-5xl font-bold mb-4 text-gray-800 text-center py-4">
       Nuestros Productos
     </h1>
-    <p class="text-xl text-white text-center mb-8">
+    <p class="text-xl text-gray-800 text-center mb-8 py-2">
       Descubre nuestra amplia gama de productos de alta calidad
     </p>
 
@@ -38,20 +67,28 @@
     >
       {#each products as product (product._id)}
         <div
-          class="bg-white rounded-xl shadow-md overflow-hidden w-[300px] h-[550px] p-4"
+          class="bg-white border-4 border-gray-800 rounded-xl shadow-md overflow-hidden w-[300px] h-[550px] flex flex-col"
         >
-          <img
-            src={product.image}
-            alt={product.name}
-            class="w-80 h-80 object-cover object-center"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-semibold mb-2">{product.name}</h3>
-            <p class="text-gray-600 mb-2">${product.price.toFixed(2)}</p>
-            <p class="text-sm text-gray-500 mb-4">{product.description}</p>
+          <div class="h-1/2">
+            <img
+              src={product.image}
+              alt={product.name}
+              class="w-full h-full object-cover object-center"
+            />
+          </div>
+          <div class="p-4 flex flex-col flex-grow">
+            <h3 class="text-lg font-semibold mb-2 h-14 overflow-hidden">
+              {product.name}
+            </h3>
+            <p class="text-gray-800 mb-2 font-bold">
+              {formatPrice(product.price)}
+            </p>
+            <p class="text-sm text-gray-800 mb-4 flex-grow overflow-y-auto">
+              {product.description}
+            </p>
             <button
               on:click={() => addToCart(product)}
-              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
+              class="bg-blue-500 text-gray-800 px-4 py-2 rounded hover:bg-blue-600 transition duration-300 w-full mt-auto"
             >
               Añadir al carrito
             </button>

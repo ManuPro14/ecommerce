@@ -1,0 +1,72 @@
+<script lang="ts">
+  import { currentRoute } from "../stores/route";
+
+  let user = "";
+  let password = "";
+  let error = "";
+
+  function handleSubmit() {
+    if (user === "adminManuecommerce" && password === "M4nu3c0mm3rc3") {
+      localStorage.setItem("adminToken", "admin");
+      currentRoute.set("/admin");
+    } else {
+      error = "Usuario o contraseña incorrectos";
+    }
+  }
+</script>
+
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#585E94] to-[#8F8F94] py-12 px-4 sm:px-6 lg:px-8"
+>
+  <div
+    class="max-w-sm w-full space-y-8 bg-gray-300 rounded-xl p-4 min-h-[350px]"
+  >
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-800">
+        Iniciar sesión como administrador
+      </h2>
+    </div>
+    <form class="mt-8 space-y-6" on:submit|preventDefault={handleSubmit}>
+      <input type="hidden" name="remember" value="true" />
+      <div class="rounded-md shadow-sm -space-y-px">
+        <div>
+          <label for="email-address" class="sr-only">Correo electrónico</label>
+          <input
+            id="user-admin"
+            name="user"
+            type="text"
+            autocomplete="username"
+            required
+            class="appearance-none rounded-none relative bg-white
+         text-center block w-full px-3 py-2 border border-gray-800 placeholder-gray-800 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            placeholder="Usuario"
+            bind:value={user}
+          />
+        </div>
+        <div>
+          <label for="password" class="sr-only">Contraseña</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            class="appearance-none rounded-none bg-white
+         text-center relative block w-full px-3 py-2 border border-gray-800 placeholder-gray-800 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            placeholder="Contraseña"
+            bind:value={password}
+          />
+        </div>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Iniciar sesión
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

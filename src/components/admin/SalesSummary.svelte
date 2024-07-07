@@ -62,7 +62,7 @@
   }
 </script>
 
-<div class="bg-white shadow-lg rounded-lg p-6">
+<div class="bg-white shadow-lg rounded-lg p-6 border-4 border-gray-800">
   <h2 class="text-2xl font-semibold mb-4 text-gray-800">Resumen de Ventas</h2>
   <p class="text-lg mb-4 text-gray-700">
     Ingresos totales: <span class="font-bold text-green-600"
