@@ -2,11 +2,34 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API de Mi Tienda',
+      version: '1.0.0',
+      description: 'Documentación de la API de Mi Tienda',
+    },
+    servers: [
+      {
+        url: `http://localhost:${process.env.PORT || 5000}`,
+        description: 'Servidor de desarrollo',
+      },
+    ],
+  },
+  apis: ['./server.js'], 
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Conectado a MongoDB'))
@@ -32,7 +55,80 @@ const saleSchema = new mongoose.Schema({
 
 const Sale = mongoose.model('Sale', saleSchema);
 
-// CRUD operations for products
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *         - quantity
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: ID auto-generado del producto
+ *         name:
+ *           type: string
+ *           description: Nombre del producto
+ *         price:
+ *           type: number
+ *           description: Precio del producto
+ *         quantity:
+ *           type: number
+ *           description: Cantidad disponible del producto
+ *         description:
+ *           type: string
+ *           description: Descripción del producto
+ *         category:
+ *           type: string
+ *           description: Categoría del producto
+ *         image:
+ *           type: string
+ *           description: URL de la imagen del producto
+ * 
+ *     Sale:
+ *       type: object
+ *       required:
+ *         - productId
+ *         - quantity
+ *         - totalPrice
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: ID auto-generado de la venta
+ *         productId:
+ *           type: string
+ *           description: ID del producto vendido
+ *         quantity:
+ *           type: number
+ *           description: Cantidad vendida
+ *         totalPrice:
+ *           type: number
+ *           description: Precio total de la venta
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           description: Fecha de la venta
+ */
+
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Obtiene todos los productos
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: Lista de productos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ */
 app.get('/api/products', async (req, res) => {
   try {
     const products = await Product.find();
@@ -42,6 +138,28 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/products:
+ *   post:
+ *     summary: Crea un nuevo producto
+ *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       201:
+ *         description: Producto creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Datos inválidos
+ */
 app.post('/api/products', async (req, res) => {
   try {
     console.log('Recibida solicitud para añadir producto:', req.body);
@@ -56,6 +174,35 @@ app.post('/api/products', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   put:
+ *     summary: Actualiza un producto existente
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del producto
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       200:
+ *         description: Producto actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: Producto no encontrado
+ */
 app.put('/api/products/:id', async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -68,6 +215,25 @@ app.put('/api/products/:id', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   delete:
+ *     summary: Elimina un producto
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del producto
+ *     responses:
+ *       204:
+ *         description: Producto eliminado exitosamente
+ *       404:
+ *         description: Producto no encontrado
+ */
 app.delete('/api/products/:id', async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
@@ -80,7 +246,22 @@ app.delete('/api/products/:id', async (req, res) => {
   }
 });
 
-// CRUD operations for sales
+/**
+ * @swagger
+ * /api/sales:
+ *   get:
+ *     summary: Obtiene todas las ventas
+ *     tags: [Sales]
+ *     responses:
+ *       200:
+ *         description: Lista de ventas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Sale'
+ */
 app.get('/api/sales', async (req, res) => {
   try {
     const sales = await Sale.find().populate('productId');
@@ -90,6 +271,28 @@ app.get('/api/sales', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/sales:
+ *   post:
+ *     summary: Crea una nueva venta
+ *     tags: [Sales]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Sale'
+ *     responses:
+ *       201:
+ *         description: Venta creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Sale'
+ *       400:
+ *         description: Datos inválidos
+ */
 app.post('/api/sales', async (req, res) => {
   try {
     const newSale = new Sale(req.body);
