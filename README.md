@@ -1,51 +1,88 @@
-<<<<<<< HEAD
-# Svelte + TS + Vite
+# Mi Tienda Ecommerce
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+## Descripción
+Este proyecto es una plataforma de comercio electrónico desarrollada con Node.js para el backend y Svelte para el frontend. Permite a los usuarios ver productos, agregarlos al carrito y realizar compras, mientras que los administradores pueden gestionar productos e inventario.
 
-## Recommended IDE Setup
+## Características
+- Catálogo de productos
+- Carrito de compras
+- Panel de administración
+- Gestión de inventario
+- API RESTful
+- Documentación de API con Swagger
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## Tecnologías Utilizadas
+- Backend: Node.js, Express.js, MongoDB
+- Frontend: Svelte
+- Documentación API: Swagger
+- Estilizado: Tailwind CSS
 
-## Need an official Svelte framework?
+## Requisitos Previos
+- Node.js (v14 o superior)
+- MongoDB
+- npm o yarn
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## Instalación
 
-## Technical considerations
+### Backend
+1. Clona el repositorio:
+    git clone https://github.com/tu-usuario/ecommerce.git
+    cd mi-tienda-ecommerce/backend
+2. Instala las dependencias:
+   npm install
+3. Crea un archivo `.env` en la raíz del proyecto backend y agrega:
+   MONGODB_URI=tu_uri_de_mongodb
+   PORT=5000
+4. Inicia el servidor:
+   node server.ts
+El servidor estará corriendo en `http://localhost:5000`.
 
-**Why use this over SvelteKit?**
+![image](https://github.com/ManuPro14/ecommerce/assets/103762387/7b8a54da-60f2-4021-a415-bff318690b0c)
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+### Frontend
+1. Navega a la carpeta del frontend:
+   cd /ecommerce
+2. Instala las dependencias:
+   npm install
+3. Inicia la aplicación de Svelte:
+   npm run dev
+  La aplicación estará disponible en `http://localhost:5173`.
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+## Uso
+- Accede a la aplicación web a través de `http://localhost:5173`
+- La documentación de la API está disponible en `http://localhost:5000/api-docs`
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+## Estructura del Proyecto
+  ecommerce/
+  │
+  ├── backend/
+  │   ├── server.js
+  │   ├── routes/
+  │   ├── models/
+  │   └── ...
+  │
+  └── frontend/
+  ├── src/
+  │   ├── components/
+  │   ├── pages/
+  │   ├── stores/
+  │   └── App.svelte
+  └── ...
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+## API Endpoints
 
-**Why include `.vscode/extensions.json`?**
+- `GET /api/products`: Obtiene todos los productos
+- `POST /api/products`: Crea un nuevo producto
+- `PUT /api/products/:id`: Actualiza un producto existente
+- `DELETE /api/products/:id`: Elimina un producto
+- `GET /api/sales`: Obtiene todas las ventas
+- `POST /api/sales`: Registra una nueva venta
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+Para más detalles, consulta la documentación de Swagger en `http://localhost:5000/api-docs`.
 
-**Why enable `allowJs` in the TS template?**
 
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
+## Contacto
+ManuPro14 - manuelcar96@outlook.com
 
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
-=======
-# ecommerce
->>>>>>> fc4b1fdbf35455d29e05dfcd7e0294a0e4732467
+Enlace del proyecto: 
