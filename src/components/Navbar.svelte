@@ -12,12 +12,11 @@
   function navigate(path: string) {
     updateRoute(path);
     isMenuOpen = false;
+    console.log("Navigating to:", path); // Para depuración
   }
 </script>
 
-<nav
-  class="bg-gradient-to-r from-blue-500 to-purple-600 shadow-md fixed top-0 left-0 right-0 z-50"
->
+<nav class="bg-gray-800 shadow-md fixed top-0 left-0 right-0 z-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
       <div class="flex items-center">
@@ -57,7 +56,6 @@
         </a>
       </div>
 
-      <!-- Botón de menú hamburguesa para móviles -->
       <div class="flex items-center md:hidden">
         <button
           on:click={() => (isMenuOpen = !isMenuOpen)}
@@ -82,7 +80,6 @@
     </div>
   </div>
 
-  <!-- Menú desplegable para móviles -->
   {#if isMenuOpen}
     <div class="md:hidden">
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">

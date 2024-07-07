@@ -78,9 +78,9 @@
   }
 </script>
 
-<div class="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 py-20">
+<div class="min-h-screen bg-gray-200 py-20">
   <div class="container mx-auto px-4">
-    <h1 class="text-4xl font-bold mb-8 text-white text-center">
+    <h1 class="text-4xl font-bold mb-8 text-gray-800 text-center">
       Gestión de Inventario
     </h1>
 
@@ -102,13 +102,15 @@
       on:error={handleError}
     />
 
-    <div class="bg-gray-200 shadow-lg rounded-lg p-6 mb-8">
+    <div
+      class="bg-gray-200 shadow-lg rounded-lg p-6 mb-8 border-2 border-gray-800"
+    >
       <div class="flex flex-col md:flex-row justify-between items-center mb-4">
         <input
           type="text"
           bind:value={searchTerm}
           placeholder="Buscar productos..."
-          class="w-full md:w-64 px-4 text-gray-700 py-2 rounded-full border-2 border-gray-300 focus:outline-none focus:border-blue-500 mb-4 md:mb-0"
+          class="w-full md:w-64 px-4 text-gray-800 py-2 rounded-full bg-white border-2 border-gray-800 focus:outline-none focus:border-blue-500 mb-4 md:mb-0"
         />
         <button
           on:click={goBack}
@@ -119,16 +121,16 @@
       </div>
 
       {#if isLoading}
-        <p class="text-center text-gray-600">Cargando productos...</p>
+        <p class="text-center text-gray-800">Cargando productos...</p>
       {:else if filteredProducts.length === 0}
-        <p class="text-center text-gray-600">No se encontraron productos.</p>
+        <p class="text-center text-gray-800">No se encontraron productos.</p>
       {:else}
         <div class="overflow-x-auto">
-          <table class="min-w-full bg-white">
+          <table class="min-w-full bg-white rounded-5xl">
             <thead>
               <tr>
                 <th
-                  class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  class="px-6 py-3 border-2 border-gray-800 text-left text-xs leading-4 font-medium text-gray-800 uppercase tracking-wider cursor-pointer"
                   on:click={() => handleSort("name")}
                 >
                   Nombre {sortBy === "name"
@@ -138,7 +140,7 @@
                     : ""}
                 </th>
                 <th
-                  class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  class="px-6 py-3 border-2 border-gray-800 text-left text-xs leading-4 font-medium text-gray-800 uppercase tracking-wider cursor-pointer"
                   on:click={() => handleSort("price")}
                 >
                   Precio {sortBy === "price"
@@ -148,7 +150,7 @@
                     : ""}
                 </th>
                 <th
-                  class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  class="px-6 py-3 border-2 border-gray-800 text-left text-xs leading-4 font-medium text-gray-800 uppercase tracking-wider cursor-pointer"
                   on:click={() => handleSort("quantity")}
                 >
                   Cantidad {sortBy === "quantity"
@@ -158,38 +160,40 @@
                     : ""}
                 </th>
                 <th
-                  class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="px-6 py-3 border-2 border-gray-800 text-left text-xs leading-4 font-medium text-gray-800 uppercase tracking-wider"
                 >
                   Descripción
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="border-2 border-gray-800">
               {#each filteredProducts as product (product._id)}
-                <tr class="hover:bg-gray-100 transition-colors duration-200">
+                <tr
+                  class="hover:bg-gray-300 transition-colors duration-200 border-2 border-gray-800"
+                >
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-300"
+                    class="px-6 py-4 whitespace-no-wrap border-2 border-gray-800"
                   >
-                    <div class="text-sm leading-5 font-medium text-gray-900">
+                    <div class="text-sm leading-5 font-medium text-gray-800">
                       {product.name}
                     </div>
                   </td>
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-300"
+                    class="px-6 py-4 whitespace-no-wrap border-2 border-gray-800"
                   >
                     <div class="text-sm leading-5 text-gray-900">
                       ${product.price.toFixed(2)}
                     </div>
                   </td>
                   <td
-                    class="px-6 py-4 whitespace-no-wrap border-b border-gray-300"
+                    class="px-6 py-4 whitespace-no-wrap border-2 border-gray-800"
                   >
                     <div class="text-sm leading-5 text-gray-900">
                       {product.quantity}
                     </div>
                   </td>
-                  <td class="px-6 py-4 border-b border-gray-300">
-                    <div class="text-sm leading-5 text-gray-900">
+                  <td class="px-6 py-4 border-2 border-gray-800">
+                    <div class="text-sm leading-5 text-gray-800">
                       {product.description}
                     </div>
                   </td>

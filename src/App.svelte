@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { currentRoute } from "./stores/route";
   import Navbar from "./components/Navbar.svelte";
   import Home from "./pages/Home.svelte";
@@ -8,7 +9,17 @@
   import Cart from "./pages/Cart.svelte";
   import Inventory from "./pages/Inventory.svelte";
 
-  $: path = $currentRoute;
+  let path: string;
+
+  currentRoute.subscribe((value) => {
+    path = value;
+    console.log("Current route:", path); // Para depuración
+  });
+
+  onMount(() => {
+    // Asegúrate de que la ruta inicial se establezca correctamente
+    currentRoute.update(window.location.pathname);
+  });
 </script>
 
 <Navbar />

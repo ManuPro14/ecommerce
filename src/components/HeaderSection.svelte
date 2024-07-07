@@ -11,7 +11,7 @@
 >
   <div
     class="w-full h-full top-0 absolute backdrop-blur-sm"
-    style="background: linear-gradient(to right, rgba(59, 130, 246, 0.9), rgba(147, 51, 234, 0.9));"
+    style="background: linear-gradient(to right, rgba(88, 94, 148, 0.9), rgba(143, 143, 148, 0.9));"
   ></div>
 
   <div class="relative z-20 mx-4">

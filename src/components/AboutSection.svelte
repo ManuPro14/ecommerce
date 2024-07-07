@@ -6,7 +6,7 @@
     <div class="flex flex-wrap items-center">
       <div class="w-full md:w-1/2 mb-8 md:mb-0">
         <img
-          src="https://via.placeholder.com/600x400"
+          src="https://plus.unsplash.com/premium_photo-1683288662040-5ca51d0880b2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGVjb21tZXJjZXxlbnwwfHwwfHx8MA%3D%3D"
           alt="About Us"
           class="rounded-lg shadow-lg"
         />

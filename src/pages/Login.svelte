@@ -1,70 +1,95 @@
 <script lang="ts">
-  import { currentRoute } from "../stores/route";
+  import { updateRoute } from "../stores/route";
+  import { API_URL } from "../config";
 
-  let user = "";
+  let username = "";
   let password = "";
   let error = "";
 
-  function handleSubmit() {
-    if (user === "adminManuecommerce" && password === "M4nu3c0mm3rc3") {
-      localStorage.setItem("adminToken", "admin");
-      currentRoute.set("/admin");
-    } else {
-      error = "Usuario o contraseña incorrectos";
+  async function handleSubmit() {
+    console.log("submit");
+    try {
+      const response = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      console.log(response);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error en el inicio de sesión");
+      }
+
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.userId);
+
+      updateRoute("/admin");
+    } catch (err) {
+      error = "Error en el inicio de sesión";
     }
   }
 </script>
 
-<div
-  class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 py-12 px-4 sm:px-6 lg:px-8"
->
-  <div
-    class="max-w-sm w-full space-y-8 bg-gray-300 rounded-xl p-4 min-h-[350px]"
-  >
-    <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-800">
-        Iniciar sesión como administrador
-      </h2>
-    </div>
-    <form class="mt-8 space-y-6" on:submit|preventDefault={handleSubmit}>
-      <input type="hidden" name="remember" value="true" />
-      <div class="rounded-md shadow-sm -space-y-px">
-        <div>
-          <label for="email-address" class="sr-only">Correo electrónico</label>
-          <input
-            id="user-admin"
-            name="user"
-            type="text"
-            autocomplete="username"
-            required
-            class="appearance-none rounded-none relative bg-gray-400 text-center block w-full px-3 py-2 border border-gray-800 placeholder-gray-800 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="Usuario"
-            bind:value={user}
-          />
-        </div>
-        <div>
-          <label for="password" class="sr-only">Contraseña</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autocomplete="current-password"
-            required
-            class="appearance-none rounded-none bg-gray-400 text-center relative block w-full px-3 py-2 border border-gray-800 placeholder-gray-800 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="Contraseña"
-            bind:value={password}
-          />
-        </div>
-      </div>
+<div class="bg-gray-200 py-40 min-h-screen">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-800">
+      Iniciar sesión
+    </h2>
+  </div>
 
-      <div>
-        <button
-          type="submit"
-          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Iniciar sesión
-        </button>
-      </div>
-    </form>
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div
+      class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 max-w-screen-md border-4 border-gray-800 mx-auto"
+    >
+      <form class="space-y-6" on:submit|preventDefault={handleSubmit}>
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700">
+            Nombre de usuario
+          </label>
+          <div class="mt-1">
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              bind:value={username}
+              class="appearance-none block w-full bg-gray-200 text-gray-700 px-3 py-2 border border-gray-800 rounded-md shadow-sm sm:text-sm"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">
+            Contraseña
+          </label>
+          <div class="mt-1">
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              bind:value={password}
+              class="appearance-none block w-full bg-gray-200 text-gray-700 px-3 py-2 border border-gray-800 rounded-md shadow-sm sm:text-sm"
+            />
+          </div>
+        </div>
+
+        {#if error}
+          <div class="text-red-500 text-sm">{error}</div>
+        {/if}
+
+        <div>
+          <button
+            type="submit"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Iniciar sesión
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

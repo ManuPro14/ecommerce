@@ -7,15 +7,15 @@
     cartItems = items;
   });
 
-  function removeFromCart(id: string) {
-    cart.removeFromCart(id);
+  function removeFromCart(_id: string) {
+    cart.removeFromCart(_id);
   }
 
-  function updateQuantity(id: string, newQuantity: number) {
+  function updateQuantity(_id: string, newQuantity: number) {
     if (newQuantity > 0) {
-      cart.updateQuantity(id, newQuantity);
+      cart.updateQuantity(_id, newQuantity);
     } else {
-      removeFromCart(id);
+      removeFromCart(_id);
     }
   }
 
@@ -29,30 +29,30 @@
   );
 </script>
 
-<div class="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen py-40">
+<div class="bg-gray-200 min-h-screen py-40">
   <div class="container mx-auto px-4">
-    <h1 class="text-4xl font-bold mb-8 text-white text-center">
+    <h1 class="text-4xl font-bold mb-8 text-gray-800 text-center">
       Tu Carrito de Compras
     </h1>
 
     <div class="flex items-center justify-center">
       {#if cartItems.length === 0}
-        <p class="text-white text-center text-xl">Tu carrito está vacío.</p>
+        <p class="text-gray-800 text-center text-xl">Tu carrito está vacío.</p>
       {:else}
         <div
-          class="bg-gray-100 rounded-lg shadow-md p-6 max-w-screen-lg flex flex-col"
+          class="bg-gray-100 rounded-lg shadow-md p-6 max-w-screen-lg flex flex-col border-2 border-gray-800"
         >
           {#each cartItems as item (item._id)}
             <div class="flex items-center justify-between border-b-4 py-4">
-              <div class="flex items-center justify-center text-gray-700 px-4">
+              <div class="flex items-center justify-center text-gray-800 px-4">
                 <img
                   src={item.image}
                   alt={item.name}
-                  class="w-16 h-16 object-cover rounded mr-4 text-gray-700"
+                  class="w-16 h-16 object-cover rounded mr-4 text-gray-800"
                 />
                 <div class="flex flex-col justify-center items-center">
                   <h3 class="text-lg font-semibold text-center">{item.name}</h3>
-                  <p class="text-gray-600 text-center">
+                  <p class="text-gray-800 text-center">
                     ${item.price.toFixed(2)}
                   </p>
                 </div>
@@ -62,7 +62,7 @@
                 <div class="flex flex-row py-2">
                   <button
                     on:click={() => updateQuantity(item._id, item.quantity - 1)}
-                    class="bg-gray-300 py-1 rounded w-auto text-gray-700 border-gray-400"
+                    class="bg-gray-200 py-1 rounded w-auto text-gray-800 border-gray-400"
                   >
                     -
                   </button>
@@ -70,11 +70,11 @@
                     type="number"
                     bind:value={item.quantity}
                     on:change={() => updateQuantity(item._id, item.quantity)}
-                    class="w-12 text-center bg-gray-300 text-gray-700 border-gray-400 border"
+                    class="w-12 text-center bg-gray-200 text-gray-800 border-gray-400 border"
                   />
                   <button
                     on:click={() => updateQuantity(item._id, item.quantity + 1)}
-                    class="bg-gray-300 py-1 rounded w-auto text-gray-700 border-gray-400"
+                    class="bg-gray-200 py-1 rounded w-auto text-gray-800 border-gray-400"
                   >
                     +
                   </button>
