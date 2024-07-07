@@ -27,11 +27,11 @@ Este proyecto es una plataforma de comercio electrónico desarrollada con Node.j
 ### Backend
 1. Clona el repositorio:
     git clone https://github.com/ManuPro14/ecommerce.git
-    cd mi-tienda-ecommerce/backend
+    cd ecommerce/manucommerce-backend
 2. Instala las dependencias:
    npm install
 3. Crea un archivo `.env` en la raíz del proyecto backend y agrega:
-   MONGODB_URI=tu_uri_de_mongodb
+   MONGODB_URI=mongodb://localhost:27017/ManuCommerce
    PORT=5000
 4. Inicia el servidor:
    node server.ts
@@ -57,10 +57,7 @@ El servidor estará corriendo en `http://localhost:5000`.
   ecommerce/
   │
   ├── backend/
-  │   ├── server.js
-  │   ├── routes/
-  │   ├── models/
-  │   └── ...
+  │   └── server.ts
   │
   └── frontend/
   ├── src/
@@ -68,7 +65,6 @@ El servidor estará corriendo en `http://localhost:5000`.
   │   ├── pages/
   │   ├── stores/
   │   └── App.svelte
-  └── ...
 
 ## API Endpoints
 
