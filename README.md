@@ -26,7 +26,7 @@ Este proyecto es una plataforma de comercio electrónico desarrollada con Node.j
 
 ### Backend
 1. Clona el repositorio:
-    git clone https://github.com/tu-usuario/ecommerce.git
+    git clone https://github.com/ManuPro14/ecommerce.git
     cd mi-tienda-ecommerce/backend
 2. Instala las dependencias:
    npm install
