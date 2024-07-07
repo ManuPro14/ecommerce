@@ -47,6 +47,8 @@ El servidor estará corriendo en `http://localhost:5000`.
    npm install
 3. Inicia la aplicación de Svelte:
    npm run dev
+
+   
 La aplicación estará disponible en `http://localhost:5173`.
 
 ## Uso
