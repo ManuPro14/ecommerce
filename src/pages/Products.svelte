@@ -42,7 +42,6 @@
     console.log("Added to cart:", cartItem);
   }
 
-  // Función para formatear el precio en COP
   function formatPrice(price: number): string {
     return new Intl.NumberFormat("es-CO", {
       style: "currency",
@@ -73,11 +72,13 @@
             <img
               src={product.image}
               alt={product.name}
-              class="w-full h-full object-cover object-center"
+              class="w-full h-full object-cover text-gray-800 object-center"
             />
           </div>
           <div class="p-4 flex flex-col flex-grow">
-            <h3 class="text-lg font-semibold mb-2 h-14 overflow-hidden">
+            <h3
+              class="text-lg font-semibold mb-2 h-14 overflow-hidden text-gray-800"
+            >
               {product.name}
             </h3>
             <p class="text-gray-800 mb-2 font-bold">
@@ -88,7 +89,7 @@
             </p>
             <button
               on:click={() => addToCart(product)}
-              class="bg-blue-500 text-gray-800 px-4 py-2 rounded hover:bg-blue-600 transition duration-300 w-full mt-auto"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 w-full mt-auto"
             >
               Añadir al carrito
             </button>

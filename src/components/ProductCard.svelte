@@ -27,7 +27,7 @@
     <img
       src={product.image}
       alt={product.name}
-      class="w-full h-48 object-cover"
+      class="w-full h-48 object-cover text-gray-800"
     />
   {:else}
     <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
@@ -35,7 +35,7 @@
     </div>
   {/if}
   <div class="p-4">
-    <h3 class="text-lg font-semibold mb-2">{product.name}</h3>
+    <h3 class="text-lg font-semibold mb-2 text-gray-800">{product.name}</h3>
     {#if product.category}
       <p class="text-sm text-gray-800 mb-2">{product.category}</p>
     {/if}

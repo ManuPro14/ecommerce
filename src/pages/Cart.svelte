@@ -27,6 +27,15 @@
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  function formatPrice(price: number): string {
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  }
 </script>
 
 <div class="bg-gray-200 min-h-screen py-40">
@@ -53,7 +62,7 @@
                 <div class="flex flex-col justify-center items-center">
                   <h3 class="text-lg font-semibold text-center">{item.name}</h3>
                   <p class="text-gray-800 text-center">
-                    ${item.price.toFixed(2)}
+                    {formatPrice(item.price)}
                   </p>
                 </div>
               </div>
@@ -92,7 +101,7 @@
 
           <div class="mt-8">
             <h4 class="text-xl font-semibold text-gray-700">
-              Total: ${total.toFixed(2)}
+              Total: {formatPrice(total)}
             </h4>
           </div>
 
