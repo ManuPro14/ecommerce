@@ -4,6 +4,8 @@ import mongoose, { Document, Schema, ConnectOptions } from 'mongoose';
 import cors from 'cors';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -28,11 +30,12 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./server.ts'], // Ruta al archivo con las definiciones de las rutas
+  apis: ['./dist/server.js'], // Asegúrate de que esta ruta apunte a tu archivo JavaScript compilado
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+console.log('Swagger UI configurado en /api-docs');
 
 mongoose.connect(process.env.MONGODB_URI as string, { useNewUrlParser: true, useUnifiedTopology: true } as ConnectOptions)
   .then(() => console.log('Conectado a MongoDB'))
@@ -74,7 +77,21 @@ const saleSchema = new Schema<ISale>({
 
 const Sale = mongoose.model<ISale>('Sale', saleSchema);
 
-
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Obtiene todos los productos
+ *     responses:
+ *       200:
+ *         description: Lista de productos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ */
 app.get('/api/products', async (req: Request, res: Response) => {
   try {
     const products = await Product.find();
@@ -84,6 +101,25 @@ app.get('/api/products', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/products:
+ *   post:
+ *     summary: Crea un nuevo producto
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       201:
+ *         description: Producto creado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ */
 app.post('/api/products', async (req: Request, res: Response) => {
   try {
     console.log('Recibida solicitud para añadir producto:', req.body);
@@ -98,6 +134,31 @@ app.post('/api/products', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   put:
+ *     summary: Actualiza un producto existente
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       200:
+ *         description: Producto actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ */
 app.put('/api/products/:id', async (req: Request, res: Response) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -110,6 +171,21 @@ app.put('/api/products/:id', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/products/{id}:
+ *   delete:
+ *     summary: Elimina un producto
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Producto eliminado
+ */
 app.delete('/api/products/:id', async (req: Request, res: Response) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
@@ -122,6 +198,21 @@ app.delete('/api/products/:id', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/sales:
+ *   get:
+ *     summary: Obtiene todas las ventas
+ *     responses:
+ *       200:
+ *         description: Lista de ventas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Sale'
+ */
 app.get('/api/sales', async (req: Request, res: Response) => {
   try {
     const sales = await Sale.find().populate('productId');
@@ -131,6 +222,25 @@ app.get('/api/sales', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/sales:
+ *   post:
+ *     summary: Crea una nueva venta
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Sale'
+ *     responses:
+ *       201:
+ *         description: Venta creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Sale'
+ */
 app.post('/api/sales', async (req: Request, res: Response) => {
   try {
     const newSale = new Sale(req.body);
@@ -141,13 +251,6 @@ app.post('/api/sales', async (req: Request, res: Response) => {
   }
 });
 
-const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server running on port ${port}`));
-
-
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true }
@@ -155,6 +258,29 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+/**
+ * @swagger
+ * /api/register:
+ *   post:
+ *     summary: Registra un nuevo usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Usuario registrado exitosamente
+ */
 app.post('/api/register', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -167,6 +293,38 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Inicia sesión de usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login exitoso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                 userId:
+ *                   type: string
+ */
 app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -178,9 +336,58 @@ app.post('/api/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Contraseña incorrecta' });
     }
-    const token = jwt.sign({ userId: user._id }, 'tu_secreto_jwt', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'tu_secreto_jwt', { expiresIn: '1h' });
     res.json({ token, userId: user._id });
   } catch (error:any) {
     res.status(500).json({ message: 'Error en el login', error: error.message });
   }
 });
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *         - quantity
+ *       properties:
+ *         name:
+ *           type: string
+ *         price:
+ *           type: number
+ *         quantity:
+ *           type: number
+ *         description:
+ *           type: string
+ *         category:
+ *           type: string
+ *         image:
+ *           type: string
+ *     Sale:
+ *       type: object
+ *       required:
+ *         - productId
+ *         - quantity
+ *         - totalPrice
+ *       properties:
+ *         productId:
+ *           type: string
+ *         quantity:
+ *           type: number
+ *         totalPrice:
+ *           type: number
+ *         date:
+ *           type: string
+ *           format: date-time
+ */
+
+// Ruta de prueba
+app.get('/test', (req, res) => {
+  res.json({ message: 'El servidor está funcionando' });
+});
+
+const port = process.env.PORT || 5000;
+app.listen(port, () => console.log(`Server running on port ${port}`));

@@ -23,11 +23,11 @@
           confianza de nuestros clientes y nuestro compromiso con la calidad y
           la innovación.
         </p>
-        <button
+        <!-- <button
           class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
         >
           Conoce más
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
