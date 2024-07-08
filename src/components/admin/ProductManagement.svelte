@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import type { Product } from "../../types";
   import { API_URL } from "../../config";
+  import { fade } from "svelte/transition";
 
   export let products: Product[];
 
@@ -26,8 +27,23 @@
 
   const dispatch = createEventDispatcher();
 
-  $: imagePreviewUrl = editingProduct ? editingProduct.image : newProduct.image;
-  $: showImagePreview = imagePreviewUrl && isValidImageUrl(imagePreviewUrl);
+  let imagePreviewUrl = "";
+  let showImagePreview = false;
+  let imageLoading = false;
+  let imageError = false;
+
+  $: {
+    if (editingProduct) {
+      imagePreviewUrl = editingProduct.image;
+    } else {
+      imagePreviewUrl = newProduct.image;
+    }
+    showImagePreview = isValidImageUrl(imagePreviewUrl);
+    if (showImagePreview) {
+      imageLoading = true;
+      imageError = false;
+    }
+  }
 
   function isValidImageUrl(url: string): boolean {
     return url.match(/\.(jpeg|jpg|gif|png|webp)$/) != null;
@@ -154,12 +170,42 @@
 
   function handleImageChange(event: Event) {
     const target = event.target as HTMLInputElement;
+    const newImageUrl = target.value;
     if (editingProduct) {
-      editingProduct.image = target.value;
+      editingProduct.image = newImageUrl;
     } else {
-      newProduct.image = target.value;
+      newProduct.image = newImageUrl;
+    }
+    imagePreviewUrl = newImageUrl;
+    showImagePreview = isValidImageUrl(newImageUrl);
+    if (showImagePreview) {
+      imageLoading = true;
+      imageError = false;
+    } else {
+      imageLoading = false;
+      imageError = false;
     }
   }
+
+  function handleImageLoad() {
+    imageLoading = false;
+    imageError = false;
+  }
+
+  function handleImageError() {
+    imageLoading = false;
+    imageError = true;
+  }
+
+  let imgElement: HTMLImageElement;
+
+  onMount(() => {
+    if (imgElement) {
+      if (imgElement.complete) {
+        handleImageLoad();
+      }
+    }
+  });
 </script>
 
 <section class="flex justify-center items-center">
@@ -221,11 +267,29 @@
           class="w-full p-2 rounded bg-gray-200 text-gray-800 placeholder:text-gray-700 border-2 border-gray-800"
         />
         {#if showImagePreview}
-          {console.log(showImagePreview)}
+          {#if imageLoading}
+            <div
+              class="w-full h-64 flex items-center justify-center bg-gray-200"
+            >
+              <p>Cargando imagen...</p>
+            </div>
+          {/if}
+          {#if imageError}
+            <div
+              class="w-full h-64 flex items-center justify-center bg-gray-200"
+            >
+              <p>Error al cargar la imagen</p>
+            </div>
+          {/if}
           <img
+            bind:this={imgElement}
+            transition:fade
             src={imagePreviewUrl}
             alt="Preview"
-            class="w-full h-full object-fill rounded"
+            class="w-full h-64 object-cover rounded"
+            on:load={handleImageLoad}
+            on:error={handleImageError}
+            style="display: {imageLoading || imageError ? 'none' : 'block'};"
           />
         {/if}
       </div>
@@ -262,7 +326,8 @@
               <button
                 on:click={() => startEditing(product)}
                 class="bg-blue-500 text-white p-1 rounded-full"
-                ><svg
+              >
+                <svg
                   class="w-3 h-3 text-gray-800 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
@@ -283,7 +348,8 @@
               <button
                 on:click={() => deleteProduct(product._id)}
                 class="bg-red-500 text-white p-1 rounded-full"
-                ><svg
+              >
+                <svg
                   class="w-3 h-3 text-gray-800 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"

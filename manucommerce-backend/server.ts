@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import mongoose, { Document, Schema, ConnectOptions } from 'mongoose';
 import cors from 'cors';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -280,15 +280,28 @@ const User = mongoose.model('User', userSchema);
  *     responses:
  *       201:
  *         description: Usuario registrado exitosamente
+ *       400:
+ *         description: El nombre de usuario ya está en uso
  */
 app.post('/api/register', async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log('Intento de registro para:', username);
+
+    // Verificar si el usuario ya existe
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      console.log('El usuario ya existe:', username);
+      return res.status(400).json({ message: 'El nombre de usuario ya está en uso' });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ username, password: hashedPassword });
     await user.save();
+    console.log('Usuario registrado exitosamente:', username);
     res.status(201).json({ message: 'Usuario registrado exitosamente' });
   } catch (error:any) {
+    console.error('Error en el registro:', error);
     res.status(500).json({ message: 'Error en el registro', error: error.message });
   }
 });
@@ -328,18 +341,28 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
+    console.log('Intento de inicio de sesión para:', username);
     const user = await User.findOne({ username });
     if (!user) {
+      console.log('Usuario no encontrado:', username);
       return res.status(400).json({ message: 'Usuario no encontrado' });
     }
+    console.log('Usuario encontrado:', user);
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Resultado de la comparación de contraseñas:', isMatch);
     if (!isMatch) {
       return res.status(400).json({ message: 'Contraseña incorrecta' });
     }
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'tu_secreto_jwt', { expiresIn: '1h' });
+    console.log('Token generado para:', username);
     res.json({ token, userId: user._id });
   } catch (error:any) {
-    res.status(500).json({ message: 'Error en el login', error: error.message });
+    console.error('Error detallado en el login:', error);
+    res.status(500).json({ 
+      message: 'Error en el login', 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
@@ -387,6 +410,16 @@ app.post('/api/login', async (req, res) => {
 // Ruta de prueba
 app.get('/test', (req, res) => {
   res.json({ message: 'El servidor está funcionando' });
+});
+
+// Middleware de manejo de errores
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  if (err.code === 11000) {
+    res.status(400).json({ message: 'El nombre de usuario ya está en uso' });
+  } else {
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
 });
 
 const port = process.env.PORT || 5000;
