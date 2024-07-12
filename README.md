@@ -30,7 +30,7 @@ Este proyecto es una plataforma de comercio electrónico desarrollada con Node.j
     cd ecommerce/manucommerce-backend
 2. Instala las dependencias:
    npm install
-3. Levantar el servidor
+3. Levantar el servidor:
     npx tsx server.ts
 4. Crea un archivo `.env` en la raíz del proyecto backend y agrega:
    MONGODB_URI=mongodb://localhost:27017/ManuCommerce
