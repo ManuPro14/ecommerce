@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose, { Document, Schema } from 'mongoose';
-//@ts-ignore
 import cors from 'cors';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -12,7 +11,16 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.PRODUCTION_URL || 'https://ecommerce-one-virid.vercel.app/'
+    : 'http://localhost:5000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+
 app.use(express.json());
 
 // Configuración de Swagger
@@ -27,7 +35,7 @@ const swaggerOptions = {
     servers: [
       {
         url: process.env.NODE_ENV === 'production'
-          ? process.env.PRODUCTION_URL || 'https://tu-url-de-produccion.com'
+          ? process.env.PRODUCTION_URL || 'https://ecommerce-one-virid.vercel.app/'
           : `http://localhost:${process.env.PORT || 10000}`,
         description: process.env.NODE_ENV === 'production' ? 'Servidor de producción' : 'Servidor de desarrollo',
       },
