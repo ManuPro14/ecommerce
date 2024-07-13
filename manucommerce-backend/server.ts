@@ -28,7 +28,7 @@ const swaggerOptions = {
       {
         url: process.env.NODE_ENV === 'production'
           ? 'https://ecommerce-one-virid.vercel.app/'  
-          : `http://localhost:${process.env.PORT || 5000}`,
+          : `http://localhost:${process.env.PORT || 10000}`,
         description: process.env.NODE_ENV === 'production' ? 'Servidor de producción' : 'Servidor de desarrollo',
       },
     ],
