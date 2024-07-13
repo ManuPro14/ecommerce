@@ -2,12 +2,14 @@
   "name": "manucommerce-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx tsx server.ts"
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "dev": "npx tsx server.ts"
   },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
