@@ -7,7 +7,5 @@
     "strict": true,
     "outDir": "./dist"
   },
-  "scripts": {
-    "start": "npx tsx server.ts"
-  }
+  
 }
