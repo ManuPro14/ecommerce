@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose, { Document, Schema } from 'mongoose';
-import cors from 'cors';
+import cors = require('cors');
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import * as bcrypt from 'bcrypt';
