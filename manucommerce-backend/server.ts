@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import express, { Request, Response, NextFunction } from 'express';
-import mongoose, { Document, Schema, ConnectOptions } from 'mongoose';
-//@ts-ignore
+import mongoose, { Document, Schema } from 'mongoose';
 import cors from 'cors';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -27,7 +26,7 @@ const swaggerOptions = {
     servers: [
       {
         url: process.env.NODE_ENV === 'production'
-          ? 'https://ecommerce-one-virid.vercel.app/'  
+          ? process.env.PRODUCTION_URL || 'https://tu-url-de-produccion.com'
           : `http://localhost:${process.env.PORT || 10000}`,
         description: process.env.NODE_ENV === 'production' ? 'Servidor de producción' : 'Servidor de desarrollo',
       },
@@ -47,35 +46,15 @@ if (!mongoURI) {
   process.exit(1);
 }
 
-mongoose.connect(mongoURI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-} as ConnectOptions)
+mongoose.connect(mongoURI)
   .then(async () => {
     console.log('Conectado a MongoDB Atlas');
-    
     try {
-      // Obtener todas las colecciones
       const collections = await mongoose.connection.db.listCollections().toArray();
       console.log('Colecciones en la base de datos:');
-      
-      for (const collectionInfo of collections) {
-        console.log(`\nColección: ${collectionInfo.name}`);
-        
-        // Obtener los documentos de la colección
-        const documents = await mongoose.connection.db.collection(collectionInfo.name).find({}).toArray();
-        
-        if (documents.length === 0) {
-          console.log('  La colección está vacía.');
-        } else {
-          documents.forEach((doc, index) => {
-            console.log(`  Documento ${index + 1}:`);
-            console.log(JSON.stringify(doc, null, 2));
-          });
-        }
-      }
+      collections.forEach(collection => console.log(collection.name));
     } catch (error) {
-      console.error('Error al listar las colecciones y sus documentos:', error);
+      console.error('Error al listar las colecciones:', error);
     }
   })
   .catch(err => {
@@ -455,7 +434,7 @@ app.post('/api/login', async (req, res) => {
  */
 
 // Ruta de prueba
-app.get('/test', (req, res) => {
+app.get('/', (req, res) => {
   res.json({ message: 'El servidor está funcionando' });
 });
 
@@ -469,5 +448,5 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 10000;
 app.listen(port, () => console.log(`Servidor corriendo en el puerto ${port}`));
