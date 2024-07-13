@@ -50,7 +50,33 @@ mongoose.connect(mongoURI, {
   useNewUrlParser: true, 
   useUnifiedTopology: true 
 } as ConnectOptions)
-  .then(() => console.log('Conectado a MongoDB Atlas'))
+  .then(async () => {
+    console.log('Conectado a MongoDB Atlas');
+    
+    try {
+      // Obtener todas las colecciones
+      const collections = await mongoose.connection.db.listCollections().toArray();
+      console.log('Colecciones en la base de datos:');
+      
+      for (const collectionInfo of collections) {
+        console.log(`\nColección: ${collectionInfo.name}`);
+        
+        // Obtener los documentos de la colección
+        const documents = await mongoose.connection.db.collection(collectionInfo.name).find({}).toArray();
+        
+        if (documents.length === 0) {
+          console.log('  La colección está vacía.');
+        } else {
+          documents.forEach((doc, index) => {
+            console.log(`  Documento ${index + 1}:`);
+            console.log(JSON.stringify(doc, null, 2));
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error al listar las colecciones y sus documentos:', error);
+    }
+  })
   .catch(err => {
     console.error('Error de conexión a MongoDB Atlas:', err);
     process.exit(1);
@@ -74,7 +100,7 @@ const productSchema = new Schema<IProduct>({
   image: { type: String }
 });
 
-const Product = mongoose.model<IProduct>('Product', productSchema);
+const Product = mongoose.model<IProduct>('products', productSchema);
 
 interface ISale extends Document {
   productId: mongoose.Types.ObjectId;
@@ -84,7 +110,7 @@ interface ISale extends Document {
 }
 
 const saleSchema = new Schema<ISale>({
-  productId: { type: Schema.Types.ObjectId, ref: 'Product' },
+  productId: { type: Schema.Types.ObjectId, ref: 'products' },
   quantity: Number,
   totalPrice: Number,
   date: { type: Date, default: Date.now }
