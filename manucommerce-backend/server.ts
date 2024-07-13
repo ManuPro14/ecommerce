@@ -25,21 +25,36 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT || 5000}`,
-        description: 'Servidor de desarrollo',
+        url: process.env.NODE_ENV === 'production'
+          ? 'https://ecommerce-one-virid.vercel.app/'  
+          : `http://localhost:${process.env.PORT || 5000}`,
+        description: process.env.NODE_ENV === 'production' ? 'Servidor de producción' : 'Servidor de desarrollo',
       },
     ],
   },
-  apis: ['./dist/server.js'], // Asegúrate de que esta ruta apunte a tu archivo JavaScript compilado
+  apis: ['./dist/server.js'], 
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 console.log('Swagger UI configurado en /api-docs');
 
-mongoose.connect(process.env.MONGODB_URI as string, { useNewUrlParser: true, useUnifiedTopology: true } as ConnectOptions)
-  .then(() => console.log('Conectado a MongoDB'))
-  .catch(err => console.error('Error de conexión a MongoDB:', err));
+// Conexión a MongoDB Atlas
+const mongoURI = process.env.MONGODB_URI;
+if (!mongoURI) {
+  console.error('MONGODB_URI no está definido en las variables de entorno');
+  process.exit(1);
+}
+
+mongoose.connect(mongoURI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
+} as ConnectOptions)
+  .then(() => console.log('Conectado a MongoDB Atlas'))
+  .catch(err => {
+    console.error('Error de conexión a MongoDB Atlas:', err);
+    process.exit(1);
+  });
 
 interface IProduct extends Document {
   name: string;
@@ -353,7 +368,12 @@ app.post('/api/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Contraseña incorrecta' });
     }
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'tu_secreto_jwt', { expiresIn: '1h' });
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error('JWT_SECRET no está definido en las variables de entorno');
+      return res.status(500).json({ message: 'Error de configuración del servidor' });
+    }
+    const token = jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1h' });
     console.log('Token generado para:', username);
     res.json({ token, userId: user._id });
   } catch (error:any) {
@@ -423,4 +443,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, () => console.log(`Servidor corriendo en el puerto ${port}`));
