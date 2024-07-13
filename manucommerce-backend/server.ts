@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose, { Document, Schema } from 'mongoose';
-import cors = require('cors');
+import cors from 'cors';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import * as bcrypt from 'bcrypt';
@@ -10,9 +10,6 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const app = express();
-const corsMiddleware = (cors as any);
-
-app.use(corsMiddleware());
 
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
