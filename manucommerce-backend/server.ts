@@ -10,6 +10,9 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const app = express();
+const corsMiddleware = (cors as any);
+
+app.use(corsMiddleware());
 
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
