@@ -11,10 +11,16 @@ dotenv.config();
 
 const app = express();
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:10000';
+
+fetch(`${API_URL}/api/products`)
+  .then(response => response.json())
+  .then(data => console.log(data));
+
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? process.env.PRODUCTION_URL || 'https://ecommerce-one-virid.vercel.app/'
-    : 'http://localhost:5000',
+    ? [process.env.PRODUCTION_URL || 'https://ecommerce-one-virid.vercel.app', 'https://ecommerce-omp9.onrender.com']
+    : 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -35,7 +41,7 @@ const swaggerOptions = {
     servers: [
       {
         url: process.env.NODE_ENV === 'production'
-          ? process.env.PRODUCTION_URL || 'https://ecommerce-one-virid.vercel.app/'
+          ? 'https://ecommerce-omp9.onrender.com'
           : `http://localhost:${process.env.PORT || 10000}`,
         description: process.env.NODE_ENV === 'production' ? 'Servidor de producción' : 'Servidor de desarrollo',
       },
