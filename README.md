@@ -15,7 +15,7 @@ Este proyecto es una plataforma de comercio electrónico desarrollada con Node.j
 
 ## Tecnologías Utilizadas
 
-- Backend: Render
+- Backend: NodeJS, TypeScript, desplegado en Render
 - Frontend: Svelte
 - Documentación API: Swagger
 - Estilizado: Tailwind CSS
