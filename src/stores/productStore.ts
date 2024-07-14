@@ -9,7 +9,7 @@ function createProductStore() {
     subscribe,
     loadProducts: async () => {
       try {
-        const response = await fetch(`${API_URL}/products`);
+        const response = await fetch(`${API_URL}/api/products`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const products = await response.json();
         set(products);
@@ -19,7 +19,7 @@ function createProductStore() {
     },
     addProduct: async (newProduct: Omit<Product, '_id'>) => {
       try {
-        const response = await fetch(`${API_URL}/products`, {
+        const response = await fetch(`${API_URL}/api/products`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newProduct),
@@ -34,7 +34,7 @@ function createProductStore() {
     },
     updateProduct: async (updatedProduct: Product) => {
       try {
-        const response = await fetch(`${API_URL}/products/${updatedProduct._id}`, {
+        const response = await fetch(`${API_URL}/api/products/${updatedProduct._id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updatedProduct),
@@ -49,7 +49,7 @@ function createProductStore() {
     },
     deleteProduct: async (id: string) => {
       try {
-        const response = await fetch(`${API_URL}/products/${id}`, { method: 'DELETE' });
+        const response = await fetch(`${API_URL}/api/products/${id}`, { method: 'DELETE' });
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         update(products => products.filter(p => p._id !== id));
       } catch (error) {

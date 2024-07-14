@@ -16,7 +16,7 @@
 
   async function loadSales() {
     try {
-      const response = await fetch(`${API_URL}/sales`);
+      const response = await fetch(`${API_URL}/api/sales`);
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
       sales = await response.json();

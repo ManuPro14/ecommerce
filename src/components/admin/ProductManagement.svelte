@@ -51,7 +51,7 @@
 
   async function addProduct() {
     try {
-      const response = await fetch(`${API_URL}/products`, {
+      const response = await fetch(`${API_URL}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newProduct),
@@ -80,7 +80,7 @@
     if (editingProduct) {
       try {
         const response = await fetch(
-          `${API_URL}/products/${editingProduct._id}`,
+          `${API_URL}/api/products/${editingProduct._id}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -104,7 +104,7 @@
   async function deleteProduct(id: string) {
     if (confirm("¿Estás seguro de que quieres eliminar este producto?")) {
       try {
-        const response = await fetch(`${API_URL}/products/${id}`, {
+        const response = await fetch(`${API_URL}/api/products/${id}`, {
           method: "DELETE",
         });
         if (!response.ok)

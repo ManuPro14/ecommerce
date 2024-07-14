@@ -19,7 +19,7 @@
   async function loadProducts() {
     try {
       isLoading = true;
-      const response = await fetch(`${API_URL}/products`);
+      const response = await fetch(`${API_URL}/api/products`);
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
       products = await response.json();
