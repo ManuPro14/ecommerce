@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Este proyecto es una plataforma de comercio electrónico desarrollada con Node.js para el backend y Svelte para el frontend. Permite a los usuarios ver productos, agregarlos al carrito y realizar compras, mientras que los administradores pueden gestionar productos e inventario.
+Este proyecto es una plataforma de comercio electrónico desarrollada con Node.js para el backend y Svelte para el frontend. Permite a los usuarios ver productos y agregarlos al carrito, mientras que los administradores pueden gestionar productos e inventario.
 
 ## Características
 
