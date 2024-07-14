@@ -9,7 +9,7 @@
   async function handleSubmit() {
     console.log("submit");
     try {
-      const response = await fetch(`${API_URL}/login`, {
+      const response = await fetch(`${API_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
