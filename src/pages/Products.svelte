@@ -15,7 +15,9 @@
 
   async function fetchProducts() {
     try {
-      const response = await fetch("https://ecommerce-omp9.onrender.com");
+      const response = await fetch(
+        "https://ecommerce-omp9.onrender.com/api/products"
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
