@@ -20,7 +20,7 @@ fetch(`${API_URL}/api/products`)
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? [process.env.PRODUCTION_URL || 'https://ecommerce-one-virid.vercel.app', 'https://ecommerce-omp9.onrender.com']
-    : 'http://localhost:3000',
+    : 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
