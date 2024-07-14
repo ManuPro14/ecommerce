@@ -15,9 +15,7 @@
 
   async function fetchProducts() {
     try {
-      const response = await fetch(
-        "https://discordapp.com/channels/@me/1234954996634877994/1261836969084719215"
-      );
+      const response = await fetch("https://ecommerce-omp9.onrender.com");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
