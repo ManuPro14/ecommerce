@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { cart } from "../stores/cartStore";
   import type { CartItem } from "../stores/cartStore";
-  const API_URL = process.env.API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
   interface Product {
     _id: string;
     name: string;
