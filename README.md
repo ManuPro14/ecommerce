@@ -40,7 +40,7 @@ Este proyecto es una plataforma de comercio electrónico desarrollada con Node.j
    ✔ .env
 4. Inicia la aplicación de Svelte:
    npm run dev
-5. Usuario del administrador:
+5. Inicie sesión con el usuario del administrador (el userId y el token se guardan en el localstorage):
    User: AdminCommerce
    Password: EcommerceAdmin
 
