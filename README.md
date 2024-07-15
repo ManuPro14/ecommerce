@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Este proyecto es una plataforma de comercio electrónico desarrollada con Node.js para el backend y Svelte para el frontend. Permite a los usuarios ver productos, agregarlos al carrito y realizar compras, mientras que los administradores pueden gestionar productos e inventario.
+Este proyecto es una plataforma de comercio electrónico desarrollada con Node.js para el backend y Svelte para el frontend. Permite a los usuarios ver productos y agregarlos al carrito, mientras que los administradores pueden gestionar productos e inventario.
 
 ## Características
 
@@ -15,7 +15,7 @@ Este proyecto es una plataforma de comercio electrónico desarrollada con Node.j
 
 ## Tecnologías Utilizadas
 
-- Backend: Node.js, Express.js, MongoDB
+- Backend: NodeJS, TypeScript, desplegado en Render
 - Frontend: Svelte
 - Documentación API: Swagger
 - Estilizado: Tailwind CSS
@@ -23,26 +23,9 @@ Este proyecto es una plataforma de comercio electrónico desarrollada con Node.j
 ## Requisitos Previos
 
 - Node.js (v14 o superior)
-- MongoDB
 - npm o yarn
 
 ## Instalación
-
-### Backend
-
-1. Clona el repositorio:
-   git clone https://github.com/ManuPro14/ecommerce.git
-   cd ecommerce/manucommerce-backend
-2. Instala las dependencias:
-   npm install
-3. Levantar el servidor:
-   npx tsx server.ts
-4. Crea un archivo `.env` en la raíz del proyecto backend y agrega:
-   MONGODB_URI=[mongodb://localhost:27017/ManuCommerce](https://discordapp.com/channels/@me/1234954996634877994/1261836969084719215)
-   PORT=5000
-5. Inicia el servidor:
-   node server.ts
-   El servidor estará corriendo en `https://discordapp.com/channels/@me/1234954996634877994/1261836969084719215`.
 
 ![image](https://github.com/ManuPro14/ecommerce/assets/103762387/7b8a54da-60f2-4021-a415-bff318690b0c)
 
@@ -63,13 +46,13 @@ La aplicación estará disponible en `http://localhost:5173`.
 ## Uso
 
 - Accede a la aplicación web a través de `http://localhost:5173`
-- La documentación de la API está disponible en `https://discordapp.com/channels/@me/1234954996634877994/1261836969084719215`
+- La documentación de la API está disponible en `https://ecommerce-omp9.onrender.com/api-docs`
 
 ## Estructura del Proyecto
 
 ecommerce/
 │
-├── backend/
+├── backend/ (se encuentra desplegado en Render)
 │ └── server.ts
 │
 └── frontend/
@@ -88,7 +71,7 @@ ecommerce/
 - `GET /api/sales`: Obtiene todas las ventas
 - `POST /api/sales`: Registra una nueva venta
 
-Para más detalles, consulta la documentación de Swagger en `http://localhost:5000/api-docs`.
+Para más detalles, consulta la documentación de Swagger en `https://ecommerce-omp9.onrender.com/api-docs`.
 
 ## Contacto
 
