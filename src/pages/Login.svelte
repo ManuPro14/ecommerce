@@ -1,6 +1,6 @@
 <script lang="ts">
   import { updateRoute } from "../stores/route";
-  import { API_URL } from "../config";
+  const API_URL = import.meta.env.API_URL;
 
   let username = "";
   let password = "";

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Product } from '../types';
-import { API_URL } from '../config';
+const API_URL = import.meta.env.API_URL;
 
 function createProductStore() {
   const { subscribe, set, update } = writable<Product[]>([]);

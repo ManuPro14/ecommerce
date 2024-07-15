@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import Chart from "chart.js/auto";
   import type { Sale } from "../../types";
-  import { API_URL } from "../../config";
+  const API_URL = import.meta.env.API_URL;
 
   let canvas: HTMLCanvasElement;
   let chart: Chart | null = null;

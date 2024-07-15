@@ -1,1 +1,0 @@
-export const API_URL = 'https://ecommerce-omp9.onrender.com'; 

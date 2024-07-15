@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { currentRoute } from "../stores/route";
-  import { API_URL } from "../config";
+  const API_URL = import.meta.env.API_URL;
   import type { Product } from "../types";
   import ProductManagement from "../components/admin/ProductManagement.svelte";
 
