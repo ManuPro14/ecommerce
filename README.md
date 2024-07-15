@@ -35,9 +35,12 @@ Este proyecto es una plataforma de comercio electrónico desarrollada con Node.j
    cd /ecommerce
 2. Instala las dependencias:
    npm install
-3. Inicia la aplicación de Svelte:
+3. Adecuar variables de entorno (remover el .example del archivo .env)
+   ❌ .env.example
+   ✔ .env
+4. Inicia la aplicación de Svelte:
    npm run dev
-4. Usuario del administrador:
+5. Usuario del administrador:
    User: AdminCommerce
    Password: EcommerceAdmin
 
