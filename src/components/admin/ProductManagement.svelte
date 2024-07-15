@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
   import type { Product } from "../../types";
-  const API_URL = import.meta.env.API_URL;
+  const API_URL = process.env.API_URL;
   import { fade } from "svelte/transition";
 
   export let products: Product[];

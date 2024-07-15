@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { cart } from "../stores/cartStore";
   import type { CartItem } from "../stores/cartStore";
-
+  const API_URL = process.env.API_URL;
   interface Product {
     _id: string;
     name: string;
@@ -15,9 +15,7 @@
 
   async function fetchProducts() {
     try {
-      const response = await fetch(
-        "https://ecommerce-omp9.onrender.com/api/products"
-      );
+      const response = await fetch(`${API_URL}/api/products`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
